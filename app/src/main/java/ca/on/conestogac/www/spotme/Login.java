@@ -25,7 +25,7 @@ import android.widget.TextView.OnEditorActionListener;
 import helpers.InputValidation;
 import modal.User;
 import sql.DatabaseHelper;
-
+import ca.on.conestogac.www.spotme.R;
 
 
     public class Login extends AppCompatActivity implements OnClickListener,
@@ -51,15 +51,9 @@ import sql.DatabaseHelper;
         int counter = 3;
 
         public void onClick(View view) {
-            if (username.getText().toString().equals("admin")) {
+
                 verifyFromSQLite();
-                Toast.makeText(getApplicationContext(), "Redirecting",
-                        Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(Login.this,userProfile.class));
-            } else {
-                Toast.makeText(getApplicationContext(), "Wrong Credentials",
-                        Toast.LENGTH_SHORT).show();
-            }
+
             counter--;
             if (counter == 0) {
                 loginButton.setEnabled(false);
@@ -67,8 +61,8 @@ import sql.DatabaseHelper;
 
         }
         private void initObjects() {
-            databaseHelper = new DatabaseHelper(this);
-            inputValidation = new InputValidation(this);
+            databaseHelper = new DatabaseHelper(Login.this);
+            inputValidation = new InputValidation(Login.this);
 
         }
         public void onClickSignUp(View view) {
@@ -92,7 +86,8 @@ import sql.DatabaseHelper;
             if (databaseHelper.checkUser(username.getText().toString().trim()
                     , password.getText().toString().trim())) {
 
-
+                Toast.makeText(getApplicationContext(), "Redirecting",
+                        Toast.LENGTH_SHORT).show();
                 Intent accountsIntent = new Intent(Login.this, userProfile.class);
                 accountsIntent.putExtra("USERNAME", username.getText().toString().trim());
                 emptyInputEditText();

@@ -1,8 +1,6 @@
 package modal;
 
-/**
- * Created by William on 2017-11-29.
- */
+
 
 public class User {
     private int id;

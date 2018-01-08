@@ -18,6 +18,8 @@ import android.widget.Toast;
 import modal.User;
 import helpers.InputValidation;
 import sql.DatabaseHelper;
+import ca.on.conestogac.www.spotme.R;
+
 
 public class SignUpScreen extends AppCompatActivity implements OnClickListener {
     private View view;
@@ -26,6 +28,9 @@ public class SignUpScreen extends AppCompatActivity implements OnClickListener {
     private TextView login;
     private Button signUpButton;
     private CheckBox terms_conditions;
+    private InputValidation inputValidation;
+    private DatabaseHelper databaseHelper;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,7 @@ public class SignUpScreen extends AppCompatActivity implements OnClickListener {
         terms_conditions =  (CheckBox)findViewById(R.id.terms_conditions);
         signUpButton.setOnClickListener(this);
         login.setOnClickListener(this);
+        initObjects();
     }
 
 
@@ -55,6 +61,13 @@ public class SignUpScreen extends AppCompatActivity implements OnClickListener {
                 startActivity(new Intent(SignUpScreen.this, Login.class));
                 break;
         }
+
+    }
+
+    private void initObjects() {
+        inputValidation = new InputValidation(SignUpScreen.this);
+        databaseHelper = new DatabaseHelper(SignUpScreen.this);
+        user = new User();
 
     }
 
@@ -86,9 +99,32 @@ public class SignUpScreen extends AppCompatActivity implements OnClickListener {
             Toast.makeText(getApplicationContext(), "Please select terms and conditions",
                     Toast.LENGTH_SHORT).show();
 
-        else{
-            Toast.makeText(getApplicationContext(), "Signup Complete",
-                    Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(SignUpScreen.this,Login.class));}
+        else {
+
+            if (!databaseHelper.checkUser(emailId.getText().toString().trim())) {
+
+                user.setName(fullName.getText().toString().trim());
+                user.setEmail(emailId.getText().toString().trim());
+                user.setPassword(password.getText().toString().trim());
+
+                databaseHelper.addUser(user);
+
+                // Snack Bar to show success message that record saved successfully
+                Toast.makeText(getApplicationContext(), "Registered",
+                        Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(SignUpScreen.this, Login.class));
+            } else {
+                Toast.makeText(getApplicationContext(), "error",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+    private void emptyInputEditText() {
+        fullName.setText(null);
+        emailId.setText(null);
+        password.setText(null);
+        confirmPassword.setText(null);
     }
 }

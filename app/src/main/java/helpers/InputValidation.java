@@ -6,6 +6,8 @@ import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import ca.on.conestogac.www.spotme.R;
+
 public class InputValidation {
         private Context context;
 
